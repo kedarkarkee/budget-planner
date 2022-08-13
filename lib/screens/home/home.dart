@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import 'transactions_list.dart';
@@ -12,8 +11,8 @@ class HomeScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 25.0),
         child: Column(
-          children: [
-            const Padding(
+          children: const [
+            Padding(
               padding: EdgeInsets.all(24.0),
               child: Text(
                 'Hi, John',
@@ -23,27 +22,27 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            CarouselSlider(
-              items: List.generate(
-                3,
-                (index) => SizedBox(
-                  width: double.infinity,
-                  child: Card(
-                    elevation: 0,
-                    color: Colors.grey[200],
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                  ),
-                ),
-              ),
-              options: CarouselOptions(
-                enableInfiniteScroll: false,
-                scrollPhysics: const BouncingScrollPhysics(),
-                enlargeCenterPage: true,
-              ),
-            ),
-            const Expanded(child: TransactionsList())
+            // CarouselSlider(
+            //   items: List.generate(
+            //     3,
+            //     (index) => SizedBox(
+            //       width: double.infinity,
+            //       child: Card(
+            //         elevation: 0,
+            //         color: Colors.grey[200],
+            //         shape: const RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            //   options: CarouselOptions(
+            //     enableInfiniteScroll: false,
+            //     scrollPhysics: const BouncingScrollPhysics(),
+            //     enlargeCenterPage: true,
+            //   ),
+            // ),
+            Expanded(child: TransactionsLists())
           ],
         ),
       ),

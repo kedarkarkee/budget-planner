@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/category.dart';
+import '../../models/transaction.dart';
+import '../../providers/category_provider.dart';
+import '../../providers/transactions_provider.dart';
+import '../../shared/forms/amount_form_field.dart';
+import '../../shared/forms/category_form_field.dart';
+import '../../shared/forms/date_form_field.dart';
+import '../../shared/forms/transaction_form.dart';
 import '../../shared/widgets/kspacer.dart';
-import '../../shared/widgets/tab_card.dart';
 
-class AddTransactionScreen extends StatelessWidget {
+class AddTransactionScreen extends ConsumerWidget {
   const AddTransactionScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categories = ref.watch(categoriesProvider);
     final theme = Theme.of(context);
     final formKey = GlobalKey<FormState>();
+    TransactionType transactionType = TransactionType.expense;
+    Category category = categories.first;
+    num amount = 0;
+    DateTime date = DateTime.now();
+    String remarks = '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Transaction'),
@@ -23,137 +36,54 @@ class AddTransactionScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // TODO: Use Custom Form Field
-                Row(
-                  children: [
-                    ...List.generate(2, (i) {
-                      final isActive = i == 0;
-                      return Expanded(
-                        child: TabCard(
-                          isActive: isActive,
-                          title: i == 0 ? 'Expense' : 'Income',
-                        ),
-                      );
-                    })
-                  ],
+                TransactionTypeFormField(
+                  onSaved: (t) => transactionType = t ?? transactionType,
                 ),
                 kSpacer,
                 const Text('What did you spend on ?'),
                 kSpacer,
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: theme.colorScheme.secondary),
-                  ),
-                  child: ListTile(
-                    title: const Text('Food and Drinks'),
-                    trailing: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.black,
-                    ),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (ctx) {
-                          return SimpleDialog(
-                            contentPadding: const EdgeInsets.all(24),
-                            insetPadding: EdgeInsets.zero,
-                            children: [
-                              ...List.generate(categories.length, (i) {
-                                final category = categories[i];
-                                return ListTile(
-                                  leading: Center(
-                                    widthFactor: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: category.color.withOpacity(0.1),
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(
-                                          category.icon,
-                                          color: category.color,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    category.title,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  trailing: Radio<String>(
-                                    fillColor: MaterialStateProperty.all(
-                                      theme.colorScheme.secondary,
-                                    ),
-                                    value: category.title,
-                                    groupValue: categories.first.title,
-                                    onChanged: (v) {},
-                                  ),
-                                );
-                              }),
-                              ListTile(
-                                title: const Text('Add Category'),
-                                leading: Icon(
-                                  Icons.add,
-                                  color: theme.colorScheme.secondary,
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
+                CategoryFormField(
+                  context: context,
+                  initialValue: category,
+                  onSaved: (v) {
+                    category = v ?? category;
+                  },
+                  categories: categories,
                 ),
-
                 kSpacer,
                 const Text('How much did you spend ?'),
                 kSpacer,
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: theme.colorScheme.secondary),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        color: theme.colorScheme.secondary,
-                        width: 64,
-                        height: 64,
-                        alignment: Alignment.center,
-                        child: const Text(
-                          '\$',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                          textScaleFactor: 1.5,
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                              hintText: '1,000',
-                            ),
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                AmountFormField(
+                  theme: Theme.of(context),
+                  onSaved: (v) {
+                    amount = v ?? 0;
+                  },
+                  validator: (v) {
+                    if (v == null) {
+                      return 'Please enter a valid amount.';
+                    }
+                    if (v <= 0) {
+                      return 'Amount should be greater then 0.';
+                    }
+                    if (transactionType == TransactionType.expense &&
+                        v > category.availableBudget) {
+                      return 'Amount greater than available budget.';
+                    }
+                    return null;
+                  },
                 ),
                 kSpacer,
                 const Text('When did you spend ?'),
+                kSpacer,
+                DateFormField(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  onSaved: (d) {
+                    date = d ?? DateTime.now();
+                  },
+                ),
+                kSpacer,
+                const Text('Remarks'),
                 kSpacer,
                 TextFormField(
                   decoration: InputDecoration(
@@ -165,21 +95,42 @@ class AddTransactionScreen extends StatelessWidget {
                       borderSide:
                           BorderSide(color: theme.colorScheme.secondary),
                     ),
-                    hintText: '01/09/2022',
+                    errorBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                    ),
+                    hintText: 'Transaction Details',
                   ),
-                  keyboardType: TextInputType.datetime,
-                  readOnly: true,
-                  onTap: () {
-                    showDatePicker(
-                      context: context,
-                      firstDate: DateTime(2000),
-                      initialDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 30)),
-                    );
+                  validator: (s) {
+                    if (s == null || s.isEmpty) {
+                      return 'Remarks cannot be empty';
+                    }
+                    return null;
+                  },
+                  onSaved: (s) {
+                    remarks = s ?? '';
                   },
                 ),
                 kSpacer,
-                ElevatedButton(onPressed: () {}, child: const Text('Add')),
+                ElevatedButton(
+                  onPressed: () {
+                    formKey.currentState?.save();
+                    if (!formKey.currentState!.validate()) {
+                      return;
+                    }
+                    final transaction = Transaction(
+                      category,
+                      remarks,
+                      date,
+                      amount,
+                      transactionType,
+                    );
+                    ref
+                        .read(transactionsProvider.notifier)
+                        .addTransaction(transaction);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Add'),
+                ),
               ],
             ),
           ),

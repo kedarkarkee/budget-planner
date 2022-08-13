@@ -1,18 +1,18 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/category.dart';
+import '../../models/transaction.dart';
+import '../../providers/transactions_provider.dart';
 import '../../shared/widgets/category_list_tile.dart';
 
-class TransactionsList extends StatefulWidget {
-  const TransactionsList({Key? key}) : super(key: key);
+class TransactionsLists extends StatefulWidget {
+  const TransactionsLists({Key? key}) : super(key: key);
 
   @override
-  State<TransactionsList> createState() => _TransactionsListState();
+  State<TransactionsLists> createState() => _TransactionsListState();
 }
 
-class _TransactionsListState extends State<TransactionsList>
+class _TransactionsListState extends State<TransactionsLists>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   @override
@@ -59,32 +59,100 @@ class _TransactionsListState extends State<TransactionsList>
           child: TabBarView(
             controller: _tabController,
             children: List.generate(3, (index) {
-              return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: categories.length,
-                padding: const EdgeInsets.only(bottom: 24),
-                itemBuilder: (c, i) {
-                  final category = categories[i];
-                  return CategoryListTile(
-                    category: category,
-                    subtitle: const Text('Remarks\n2019/09/21'),
-                    trailing: Text(
-                      'Rs 5,600',
-                      style: TextStyle(
-                        color: [
-                          Colors.green,
-                          Colors.red
-                        ][index == 0 ? Random().nextInt(2) : index - 1],
-                      ),
-                    ),
-                    isThreeLine: true,
-                  );
-                },
-              );
+              return TransactionList(index: index);
             }),
           ),
         ),
       ],
+    );
+  }
+}
+
+class TransactionList extends ConsumerWidget {
+  const TransactionList({Key? key, required this.index}) : super(key: key);
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final transactions = ref.watch(transactionsProvider);
+
+    var reqTransactions = [...transactions];
+    if (index == 1) {
+      reqTransactions = transactions
+          .where((e) => e.transactionType == TransactionType.income)
+          .toList();
+    } else if (index == 2) {
+      reqTransactions = transactions
+          .where((e) => e.transactionType == TransactionType.expense)
+          .toList();
+    }
+    if (reqTransactions.isEmpty) {
+      return const Center(
+        child: Text('No Transactions'),
+      );
+    }
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: reqTransactions.length,
+      padding: const EdgeInsets.only(bottom: 24),
+      itemBuilder: (c, i) {
+        final t = reqTransactions[i];
+        return CategoryListTile(
+          category: t.category,
+          title: t.remarks,
+          subtitle: Text(
+            t.subtitle,
+          ),
+          trailing: Text(
+            t.amountFormatted,
+            style: TextStyle(
+              color: t.transactionType == TransactionType.income
+                  ? Colors.green
+                  : Colors.red,
+            ),
+          ),
+          isThreeLine: true,
+          onLongPress: () {
+            showDialog(
+              context: context,
+              builder: (ctx) {
+                return AlertDialog(
+                  title: const Text('Delete Transaction'),
+                  content: ListTile(
+                    title: Text(t.remarks),
+                    subtitle: Text(t.category.title),
+                    trailing: Text(
+                      t.amountFormatted,
+                      style: TextStyle(
+                        color: t.transactionType == TransactionType.expense
+                            ? Colors.red
+                            : Colors.green,
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref
+                            .read(transactionsProvider.notifier)
+                            .deleteTransaction(t);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

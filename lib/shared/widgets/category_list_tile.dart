@@ -9,15 +9,20 @@ class CategoryListTile extends StatelessWidget {
     this.subtitle,
     required this.trailing,
     this.isThreeLine = false,
+    this.onLongPress,
+    this.title,
   }) : super(key: key);
   final Category category;
+  final String? title;
   final Widget? subtitle;
   final Widget trailing;
   final bool isThreeLine;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onLongPress: onLongPress,
       leading: Center(
         widthFactor: 1,
         child: Container(
@@ -34,7 +39,7 @@ class CategoryListTile extends StatelessWidget {
           ),
         ),
       ),
-      title: Text(category.title),
+      title: Text(title ?? category.title),
       subtitle: subtitle,
       trailing: trailing,
       isThreeLine: isThreeLine,

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'screens/add_transaction/add_transaction.dart';
 import 'screens/dashboard/dashboard.dart';
 import 'screens/set_budget/set_budget.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

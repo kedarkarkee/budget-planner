@@ -71,10 +71,10 @@ class DashboardScreen extends ConsumerWidget {
             icon: const Icon(Icons.timeline),
             title: const Text('Stats'),
           ),
-          SalomonBottomBarItem(
-            icon: const Icon(Icons.person),
-            title: const Text('Profile'),
-          ),
+          // SalomonBottomBarItem(
+          //   icon: const Icon(Icons.person),
+          //   title: const Text('Profile'),
+          // ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

@@ -38,6 +38,9 @@ dependencies:
   carousel_slider: ^4.1.1
   syncfusion_flutter_charts: ^20.1.56
   flutter_riverpod: ^1.0.4
+  intl: ^0.17.0
+  syncfusion_flutter_datepicker: ^20.2.43
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:

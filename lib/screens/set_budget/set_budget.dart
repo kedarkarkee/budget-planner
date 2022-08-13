@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/category.dart';
+import '../../providers/category_provider.dart';
 import '../../shared/widgets/category_list_tile.dart';
 import '../../shared/widgets/kspacer.dart';
+import '../../utils/extensions.dart';
 
-class SetBudget extends StatelessWidget {
+class SetBudget extends ConsumerWidget {
   const SetBudget({Key? key, this.isEditing = false}) : super(key: key);
 
   final bool isEditing;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categories = ref.watch(categoriesProvider);
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(isEditing ? 'Edit Budget' : 'Set Budget')),
@@ -26,11 +30,12 @@ class SetBudget extends StatelessWidget {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (ctx, i) {
-                    final category = categories[i % 4];
+                    final category = categories[i];
                     return CategoryListTile(
                       category: category,
                       trailing: InkWell(
                         onTap: () {
+                          num budget = category.budget;
                           showDialog(
                             context: context,
                             builder: (ctx) {
@@ -55,17 +60,19 @@ class SetBudget extends StatelessWidget {
                                             color: theme.colorScheme.secondary,
                                           ),
                                         ),
-                                        hintText: '1000',
+                                        hintText: category.budget.toString(),
                                         prefixText: 'Rs\t',
                                       ),
                                       keyboardType: TextInputType.number,
-                                      readOnly: true,
-                                      onTap: () {},
+                                      onChanged: (v) {
+                                        budget = num.tryParse(v) ?? budget;
+                                      },
                                     ),
                                   ),
                                   TextButton(
                                     child: const Text('Done'),
                                     onPressed: () {
+                                      category.budget = budget;
                                       Navigator.of(context).pop();
                                     },
                                   ),
@@ -84,7 +91,7 @@ class SetBudget extends StatelessWidget {
                             vertical: 8.0,
                             horizontal: 16.0,
                           ),
-                          child: const Text('Rs 20000'),
+                          child: Text(category.budget.currencyFormat),
                         ),
                       ),
                     );
@@ -93,8 +100,9 @@ class SetBudget extends StatelessWidget {
                 ),
               ),
               OutlinedButton(
-                onPressed: () {
-                  showDialog(
+                onPressed: () async {
+                  String name = '';
+                  await showDialog(
                     context: context,
                     builder: (ctx) {
                       return SimpleDialog(
@@ -118,9 +126,11 @@ class SetBudget extends StatelessWidget {
                                     color: theme.colorScheme.secondary,
                                   ),
                                 ),
+                                hintText: 'Category Name',
                               ),
-                              readOnly: true,
-                              onTap: () {},
+                              onChanged: (s) {
+                                name = s;
+                              },
                             ),
                           ),
                           TextButton(
@@ -134,12 +144,16 @@ class SetBudget extends StatelessWidget {
                       );
                     },
                   );
+                  final c = Category(name, Icons.category, Colors.indigo);
+                  ref.read(categoriesProvider.notifier).addCategory(c);
                 },
                 child: const Text('+ Add new category'),
               ),
               kSpacer,
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
                 child: const Text('Done'),
               ),
             ],
