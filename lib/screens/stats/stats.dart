@@ -37,7 +37,7 @@ class CurrentDateRange extends StateNotifier<PickerDateRange> {
   CurrentDateRange()
       : super(
           PickerDateRange(
-            DateTime.now().subtract(const Duration(days: 7)),
+            DateTime.now().subtract(const Duration(days: 30)),
             DateTime.now(),
           ),
         );
@@ -103,7 +103,7 @@ class StatsScreen extends ConsumerWidget {
               SizedBox(
                 height: MediaQuery.of(context).size.height / 3.5,
                 child: StatChart(
-                  transactions: filteredTx,
+                  transactions: transactions,
                   transactionType: currentTab == 0
                       ? TransactionType.expense
                       : TransactionType.income,

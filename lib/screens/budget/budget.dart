@@ -104,7 +104,7 @@ class BudgetScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.of(context).pushNamed('/set-budget');
             },
-            child: const Text('Edit Monthly Budget'),
+            child: const Text('Edit Budget'),
           ),
           kSpacer,
           Expanded(

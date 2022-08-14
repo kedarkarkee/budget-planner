@@ -20,11 +20,18 @@ List<TRData> fromTransactions(
   List<Transaction> transactions,
   TransactionType transactionType,
 ) {
-  final todaysWeekDay = DateTime.now().weekday - 1;
+  final currDate = DateTime.now();
+  final todaysWeekDay = DateTime.now().weekday;
   final ddt = List.generate(7, (i) => TRData(i + 1, 0));
-  final dt = ddt.sublist(todaysWeekDay)..addAll(ddt.sublist(0, todaysWeekDay));
+  final dddt = ddt.sublist(todaysWeekDay)
+    ..addAll(ddt.sublist(0, todaysWeekDay));
+  final dt = dddt.reversed.toList();
+
   for (final t in transactions) {
-    if (t.transactionType != transactionType) {
+    if (t.transactionType != transactionType ||
+        t.date.isBefore(
+          currDate.subtract(const Duration(days: 7)),
+        )) {
       continue;
     }
     final existingDt = dt.firstWhere(

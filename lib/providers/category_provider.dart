@@ -34,6 +34,26 @@ class CategoryProvider extends StateNotifier<List<Category>> {
     state = [...state, c];
   }
 
+  void resetCategory() {
+    state = [
+      Category('Food and Drinks', Icons.restaurant, Colors.blue),
+      Category('Transportation', Icons.bus_alert, Colors.purple),
+      Category('Utilities', Icons.settings, Colors.amber),
+      Category('Education', Icons.menu_book, Colors.green),
+      Category('Rent', Icons.home, Colors.indigo),
+      Category(
+        'Health',
+        Icons.favorite,
+        Colors.red,
+      ),
+      Category(
+        'Miscellaneous',
+        Icons.tune,
+        Colors.lime,
+      ),
+    ];
+  }
+
   void addExpense(String title, num amount) {
     final c = state.indexWhere((element) => element.title == title);
     if (c != -1) {

@@ -1,26 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/transactions_provider.dart';
 import 'transactions_list.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(top: 25.0),
         child: Column(
-          children: const [
-            Padding(
-              padding: EdgeInsets.all(24.0),
-              child: Text(
-                'Hi, John',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
+          children: [
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(24.0),
+                  child: Text(
+                    'Recent Transacations',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24,
+                    ),
+                  ),
                 ),
-              ),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return AlertDialog(
+                          content: const Text('Random Transactions'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                ref
+                                    .read(transactionsProvider.notifier)
+                                    .deleteAllRecords();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('DELETE'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ref
+                                    .read(transactionsProvider.notifier)
+                                    .addRandomTransactions();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('ADD'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.refresh_outlined),
+                ),
+              ],
             ),
             // CarouselSlider(
             //   items: List.generate(
@@ -42,7 +81,7 @@ class HomeScreen extends StatelessWidget {
             //     enlargeCenterPage: true,
             //   ),
             // ),
-            Expanded(child: TransactionsLists())
+            const Expanded(child: TransactionsLists())
           ],
         ),
       ),

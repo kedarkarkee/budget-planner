@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../models/transaction.dart';
+import '../utils/extensions.dart';
 import 'category_provider.dart';
 
 final transactionsProvider =
@@ -17,6 +20,39 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
   static const _kTxKey = 'transactions';
   final box = GetStorage();
   final CategoryProvider categoryProvider;
+
+  void addRandomTransactions() {
+    final start = DateTime.now().subtract(const Duration(days: 30));
+    final days =
+        List.generate(32, (i) => DateTime(2022, start.month, start.day + (i)));
+    for (final d in days) {
+      final ctgry = categoryProvider.state.randomItem;
+      final amt = Random().nextInt(10000);
+      final iTxn = Transaction(
+        ctgry,
+        'Some Income Remarks',
+        d,
+        amt + Random().nextInt(500) + 2000,
+        TransactionType.income,
+      );
+      addTransaction(iTxn, false);
+      final eTxn = Transaction(
+        ctgry,
+        'Some Expense Remarks',
+        d,
+        amt + Random().nextInt(1000),
+        TransactionType.expense,
+      );
+      addTransaction(eTxn, false);
+    }
+    updateCache();
+  }
+
+  void deleteAllRecords() {
+    state = [];
+    updateCache();
+    categoryProvider.resetCategory();
+  }
 
   void loadTransactionFromCache() {
     final cacheTxs = box.read<List>(_kTxKey) ?? [];
@@ -39,11 +75,12 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
     }
   }
 
-  void addTransaction(Transaction transaction) {
+  void addTransaction(Transaction transaction, [bool updateC = true]) {
     updateCategory(transaction);
     state = [...state, transaction];
-
-    updateCache();
+    if (updateC) {
+      updateCache();
+    }
   }
 
   Future<void> updateCache() async {

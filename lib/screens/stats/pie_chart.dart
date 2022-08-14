@@ -49,8 +49,12 @@ class PieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chartData = tRPiefromTransaction(transactions, transactionType);
+    final tooltipBehaviour = TooltipBehavior(
+      enable: true,
+    );
     return SfCircularChart(
       title: ChartTitle(text: 'Category Distribution'),
+      tooltipBehavior: tooltipBehaviour,
       series: <CircularSeries<TRPieData, String>>[
         PieSeries<TRPieData, String>(
           dataSource: chartData,
@@ -63,6 +67,7 @@ class PieChart extends StatelessWidget {
             isVisible: true,
             overflowMode: OverflowMode.shift,
           ),
+          enableTooltip: true,
         )
       ],
     );
