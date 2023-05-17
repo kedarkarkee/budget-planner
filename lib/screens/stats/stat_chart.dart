@@ -49,10 +49,10 @@ List<TRData> fromTransactions(
 
 class StatChart extends StatelessWidget {
   const StatChart({
-    Key? key,
+    super.key,
     required this.transactionType,
     required this.transactions,
-  }) : super(key: key);
+  });
   final List<Transaction> transactions;
   final TransactionType transactionType;
 

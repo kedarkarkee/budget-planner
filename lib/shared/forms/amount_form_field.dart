@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 
 class AmountFormField extends FormField<num> {
   AmountFormField({
-    Key? key,
+    super.key,
     required ThemeData theme,
-    num initialValue = 0,
-    required FormFieldSetter<num> onSaved,
-    required String? Function(num?)? validator,
+    num super.initialValue = 0,
+    required FormFieldSetter<num> super.onSaved,
+    required super.validator,
   }) : super(
-          key: key,
-          initialValue: initialValue,
-          onSaved: onSaved,
-          validator: validator,
           builder: (state) {
             return Container(
               decoration: BoxDecoration(

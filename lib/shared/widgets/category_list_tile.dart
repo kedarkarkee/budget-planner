@@ -4,14 +4,14 @@ import '../../models/category.dart';
 
 class CategoryListTile extends StatelessWidget {
   const CategoryListTile({
-    Key? key,
+    super.key,
     required this.category,
     this.subtitle,
     required this.trailing,
     this.isThreeLine = false,
     this.onLongPress,
     this.title,
-  }) : super(key: key);
+  });
   final Category category;
   final String? title;
   final Widget? subtitle;

@@ -6,12 +6,10 @@ import '../widgets/tab_card.dart';
 
 class TransactionTypeFormField extends FormField<TransactionType> {
   TransactionTypeFormField({
-    Key? key,
-    required FormFieldSetter<TransactionType> onSaved,
+    super.key,
+    required FormFieldSetter<TransactionType> super.onSaved,
   }) : super(
-          key: key,
           initialValue: TransactionType.expense,
-          onSaved: onSaved,
           builder: (state) {
             return Row(
               children: TransactionType.values.reversed

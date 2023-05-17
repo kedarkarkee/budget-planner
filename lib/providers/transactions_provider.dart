@@ -24,7 +24,7 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
   void addRandomTransactions() {
     final start = DateTime.now().subtract(const Duration(days: 30));
     final days =
-        List.generate(32, (i) => DateTime(2022, start.month, start.day + (i)));
+        List.generate(32, (i) => DateTime(2022, start.month, start.day + i));
     for (final d in days) {
       final ctgry = categoryProvider.state.randomItem;
       final amt = Random().nextInt(10000);
@@ -35,7 +35,7 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
         amt + Random().nextInt(500) + 2000,
         TransactionType.income,
       );
-      addTransaction(iTxn, false);
+      addTransaction(iTxn, updateC: false);
       final eTxn = Transaction(
         ctgry,
         'Some Expense Remarks',
@@ -43,7 +43,7 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
         amt + Random().nextInt(1000),
         TransactionType.expense,
       );
-      addTransaction(eTxn, false);
+      addTransaction(eTxn, updateC: false);
     }
     updateCache();
   }
@@ -61,7 +61,7 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
     }
   }
 
-  void updateCategory(Transaction transaction, [bool subtract = false]) {
+  void updateCategory(Transaction transaction, {bool subtract = false}) {
     if (transaction.transactionType == TransactionType.expense) {
       categoryProvider.addExpense(
         transaction.category.title,
@@ -75,7 +75,7 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
     }
   }
 
-  void addTransaction(Transaction transaction, [bool updateC = true]) {
+  void addTransaction(Transaction transaction, {bool updateC = true}) {
     updateCategory(transaction);
     state = [...state, transaction];
     if (updateC) {
@@ -93,7 +93,7 @@ class _TransactionsProvider extends StateNotifier<List<Transaction>> {
           element.date.millisecondsSinceEpoch == t.date.millisecondsSinceEpoch,
     );
     if (reqTxn != -1) {
-      updateCategory(state[reqTxn], true);
+      updateCategory(state[reqTxn], subtract: true);
       final extState = [...state];
       state = extState..removeAt(reqTxn);
     }

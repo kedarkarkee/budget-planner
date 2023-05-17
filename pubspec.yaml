@@ -36,11 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   salomon_bottom_bar: ^3.3.1
   carousel_slider: ^4.1.1
-  syncfusion_flutter_charts: ^20.1.56
-  flutter_riverpod: ^1.0.4
-  intl: ^0.17.0
-  syncfusion_flutter_datepicker: ^20.2.43
+  syncfusion_flutter_charts: ^21.2.5
+  flutter_riverpod: ^2.3.6
+  intl: ^0.18.1
   get_storage: ^2.0.3
+  syncfusion_flutter_datepicker: ^21.2.5
 
 dev_dependencies:
   flutter_test:
@@ -51,7 +51,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  lint: ^2.0.20
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

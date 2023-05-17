@@ -8,7 +8,7 @@ import '../../shared/widgets/kspacer.dart';
 import '../../utils/extensions.dart';
 
 class SetBudget extends ConsumerWidget {
-  const SetBudget({Key? key, this.isEditing = false}) : super(key: key);
+  const SetBudget({super.key, this.isEditing = false});
 
   final bool isEditing;
 

@@ -39,10 +39,10 @@ List<TRPieData> tRPiefromTransaction(
 
 class PieChart extends StatelessWidget {
   const PieChart({
-    Key? key,
+    super.key,
     required this.transactionType,
     required this.transactions,
-  }) : super(key: key);
+  });
   final List<Transaction> transactions;
   final TransactionType transactionType;
 

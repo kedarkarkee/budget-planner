@@ -12,7 +12,7 @@ import '../../shared/forms/transaction_form.dart';
 import '../../shared/widgets/kspacer.dart';
 
 class AddTransactionScreen extends ConsumerWidget {
-  const AddTransactionScreen({Key? key}) : super(key: key);
+  const AddTransactionScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

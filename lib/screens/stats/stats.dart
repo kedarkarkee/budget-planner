@@ -48,11 +48,10 @@ class CurrentDateRange extends StateNotifier<PickerDateRange> {
 }
 
 class StatsScreen extends ConsumerWidget {
-  const StatsScreen({Key? key}) : super(key: key);
+  const StatsScreen({super.key});
   static final appBar = AppBar(
     title: const Text('Stats'),
   );
-  final hasStats = true;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -97,18 +96,15 @@ class StatsScreen extends ConsumerWidget {
                 }),
               ],
             ),
-            if (!hasStats)
-              const Expanded(child: Center(child: Text('No Stats Available')))
-            else
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 3.5,
-                child: StatChart(
-                  transactions: transactions,
-                  transactionType: currentTab == 0
-                      ? TransactionType.expense
-                      : TransactionType.income,
-                ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 3.5,
+              child: StatChart(
+                transactions: transactions,
+                transactionType: currentTab == 0
+                    ? TransactionType.expense
+                    : TransactionType.income,
               ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

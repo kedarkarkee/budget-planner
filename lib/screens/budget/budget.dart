@@ -9,7 +9,7 @@ import '../../shared/widgets/kspacer.dart';
 import '../../utils/extensions.dart';
 
 class BudgetScreen extends ConsumerWidget {
-  const BudgetScreen({Key? key}) : super(key: key);
+  const BudgetScreen({super.key});
   static final appBar = AppBar(
     title: const Text('Budget'),
   );
@@ -36,7 +36,7 @@ class BudgetScreen extends ConsumerWidget {
                   isVisible: true,
                   position: LegendPosition.top,
                   isResponsive: true,
-                  offset: const Offset(0, 0),
+                  offset: Offset.zero,
                 ),
                 series: <CircularSeries>[
                   DoughnutSeries<Category, String>(

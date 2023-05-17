@@ -33,11 +33,11 @@ class Transaction {
 
   factory Transaction.fromMap(Map<String, dynamic> map) {
     return Transaction(
-      Category.fromMap(map['category']),
-      map['remarks'] ?? '',
-      DateTime.fromMillisecondsSinceEpoch(map['date']),
-      map['amount'] ?? 0,
-      TxEx.fromName(map['transactionType']),
+      Category.fromMap(map['category'] as Map<String, dynamic>),
+      map['remarks'] as String? ?? '',
+      DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
+      map['amount'] as int? ?? 0,
+      TxEx.fromName(map['transactionType'] as String),
     );
   }
 }

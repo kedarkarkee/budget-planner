@@ -4,14 +4,12 @@ import '../../utils/extensions.dart';
 
 class DateFormField extends FormField<DateTime> {
   DateFormField({
-    Key? key,
+    super.key,
     required BuildContext context,
     required DateTime initialDate,
-    required FormFieldSetter<DateTime> onSaved,
+    required FormFieldSetter<DateTime> super.onSaved,
   }) : super(
-          key: key,
           initialValue: initialDate,
-          onSaved: onSaved,
           builder: (state) {
             final theme = Theme.of(context);
             return TextField(

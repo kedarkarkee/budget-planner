@@ -6,7 +6,7 @@ import '../../providers/transactions_provider.dart';
 import '../../shared/widgets/category_list_tile.dart';
 
 class TransactionsLists extends StatefulWidget {
-  const TransactionsLists({Key? key}) : super(key: key);
+  const TransactionsLists({super.key});
 
   @override
   State<TransactionsLists> createState() => _TransactionsListState();
@@ -69,7 +69,7 @@ class _TransactionsListState extends State<TransactionsLists>
 }
 
 class TransactionList extends ConsumerWidget {
-  const TransactionList({Key? key, required this.index}) : super(key: key);
+  const TransactionList({super.key, required this.index});
   final int index;
 
   @override

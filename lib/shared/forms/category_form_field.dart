@@ -5,15 +5,12 @@ import '../../utils/extensions.dart';
 
 class CategoryFormField extends FormField<Category> {
   CategoryFormField({
-    Key? key,
+    super.key,
     required BuildContext context,
-    required FormFieldSetter<Category> onSaved,
-    required Category initialValue,
+    required FormFieldSetter<Category> super.onSaved,
+    required Category super.initialValue,
     required List<Category> categories,
   }) : super(
-          key: key,
-          initialValue: initialValue,
-          onSaved: onSaved,
           builder: (state) {
             final theme = Theme.of(context);
             return Container(

@@ -21,7 +21,7 @@ class CurrentBottomNavIndex extends StateNotifier<int> {
 }
 
 class DashboardScreen extends ConsumerWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   Widget _getCurrentWidget(int index) {
     if (index == 0) {

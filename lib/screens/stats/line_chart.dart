@@ -51,11 +51,11 @@ List<num> getMinMaxFromTR(List<TRLineData> tr) {
 
 class LineChart extends StatelessWidget {
   const LineChart({
-    Key? key,
+    super.key,
     required this.transactionType,
     required this.transactions,
     required this.dateRange,
-  }) : super(key: key);
+  });
   final List<Transaction> transactions;
   final TransactionType transactionType;
   final PickerDateRange dateRange;

@@ -25,12 +25,12 @@ class Category {
 
   factory Category.fromMap(Map<String, dynamic> map) {
     final c = Category(
-      map['title'] ?? '',
-      IconData(map['icon'], fontFamily: 'MaterialIcons'),
-      Color(map['color']),
+      map['title'] as String? ?? '',
+      IconData(map['icon'] as int, fontFamily: 'MaterialIcons'),
+      Color(map['color'] as int),
     );
-    c.budget = map['budget'] ?? 0;
-    c.spent = map['spent'] ?? 0;
+    c.budget = map['budget'] as num? ?? 0;
+    c.spent = map['spent'] as num? ?? 0;
     return c;
   }
 }

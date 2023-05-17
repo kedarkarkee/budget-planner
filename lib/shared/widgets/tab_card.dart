@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class TabCard extends StatelessWidget {
   const TabCard({
-    Key? key,
+    super.key,
     required this.isActive,
     required this.title,
     required this.onTap,
     this.subtitle,
-  }) : super(key: key);
+  });
   final bool isActive;
   final String title;
   final String? subtitle;
