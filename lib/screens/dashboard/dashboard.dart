@@ -4,6 +4,7 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../budget/budget.dart';
 import '../home/home.dart';
+import '../stats/forecast/forecast.dart';
 import '../stats/stats.dart';
 
 final bottomNavProvider = StateNotifierProvider<CurrentBottomNavIndex, int>(
@@ -29,7 +30,7 @@ class DashboardScreen extends ConsumerWidget {
     } else if (index == 1) {
       return const BudgetScreen();
     } else if (index == 2) {
-      return const StatsScreen();
+      return const ForecastsScreen();
     } else {
       return const SizedBox.shrink();
     }
@@ -71,18 +72,16 @@ class DashboardScreen extends ConsumerWidget {
             icon: const Icon(Icons.timeline),
             title: const Text('Stats'),
           ),
-          // SalomonBottomBarItem(
-          //   icon: const Icon(Icons.person),
-          //   title: const Text('Profile'),
-          // ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed('/add-transaction');
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: currentIndex == 2
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/add-transaction');
+              },
+              child: const Icon(Icons.add),
+            ),
     );
   }
 }

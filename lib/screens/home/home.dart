@@ -32,7 +32,7 @@ class HomeScreen extends ConsumerWidget {
                       context: context,
                       builder: (ctx) {
                         return AlertDialog(
-                          content: const Text('Random Transactions'),
+                          content: const Text('Modify Transactions'),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -50,7 +50,16 @@ class HomeScreen extends ConsumerWidget {
                                     .addRandomTransactions();
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('ADD'),
+                              child: const Text('RANDOM'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ref
+                                    .read(transactionsProvider.notifier)
+                                    .addRealTransactions();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('REAL'),
                             ),
                           ],
                         );

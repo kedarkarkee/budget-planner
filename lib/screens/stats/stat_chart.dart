@@ -71,7 +71,7 @@ class StatChart extends StatelessWidget {
       ),
       plotAreaBorderWidth: 0,
       title: ChartTitle(
-        text: 'Last Week ${toBeginningOfSentenceCase(transactionType.name)}',
+        text: 'Last 7 Days ${toBeginningOfSentenceCase(transactionType.name)}s',
       ),
       series: <ChartSeries<TRData, String>>[
         ColumnSeries<TRData, String>(
